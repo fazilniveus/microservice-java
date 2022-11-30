@@ -17,29 +17,13 @@ pipeline {
 			    	checkout scm
 		    }
 	    }
-	    stage('Build') {
-
-            steps {
-
-                sh 'mvn clean'
-
-            }
-
-        }
-	}
-                
-
-        stage('Test') {
-
-            steps {
-
-                echo "Testing..."
-
-                sh 'mvn test'
-
-            }
-
-        
+	    stage('build') {
+              steps {
+                  echo 'building the software'
+                  sh './mvnw spring-boot:run'
+              }
+          }
+  
 	    stage('Build Docker Image') {
 		    steps {
 			    sh 'whoami'
