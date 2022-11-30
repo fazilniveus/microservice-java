@@ -17,13 +17,7 @@ pipeline {
 			    	checkout scm
 		    }
 	    }
-	    stage('build') {
-              steps {
-                  echo 'building the software'
-                  sh './mvnw spring-boot:run'
-              }
-          }
-  
+
 	    stage('Build Docker Image') {
 		    steps {
 			    sh 'whoami'
