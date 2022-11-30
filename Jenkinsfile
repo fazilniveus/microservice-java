@@ -3,8 +3,7 @@ pipeline {
 
 	tools {
 		 maven 'Maven'
-	
-	
+	}
 	environment {
 		PROJECT_ID = 'tech-rnd-project'
                 CLUSTER_NAME = 'network18-cluster'
@@ -40,9 +39,7 @@ pipeline {
 
             }
 
-        }
-
-	    
+        
 	    stage('Build Docker Image') {
 		    steps {
 			    sh 'whoami'
