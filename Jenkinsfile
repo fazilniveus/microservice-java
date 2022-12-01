@@ -17,6 +17,45 @@ pipeline {
 			    	checkout scm
 		    }
 	    }
+	    
+	    stage('Build') {
+		    steps {
+			    sh 'mvn clean'
+		    }
+	    }
+			    
+	    stage('Test') {
+		    steps {
+			    echo "Testing..."
+			    sh 'mvn test'
+		    }
+	    }
+	    
+	    
+	    stage('SonarQube analysis') {
+        	steps{
+        		withSonarQubeEnv('sonarqube-9.7.1') { 
+              			//sh "sudo rm ~/.m2/repository/org/owasp/dependency-check-data/7.0/jsrepository.json"
+        			sh "mvn test -Dtest=TestControllerTests  -DfailIfNoTests=false"
+        			sh "mvn clean install sonar:sonar -Dsonar.login=admin -Dsonar.password=sonar"
+    			}
+        	}
+            }
+	    
+	    stage('Quality'){
+            steps{
+                script{
+                    sleep(10)
+                    //qualitygate = waitForQualityGate()
+                    //if (qualitygate.status != "OK") {
+                      //  currentBuild.result = "FAILURE"
+                        //slackSend (channel: '****', color: '#F01717', message: "*$JOB_NAME*, <$BUILD_URL|Build #$BUILD_NUMBER>: Code coverage threshold was not met! <http://****.com:9000/sonarqube/projects|Review in SonarQube>.")
+                    //}
+                
+                    waitForQualityGate abortPipeline: true                    
+                }
+            }
+           }
 
 	    stage('Build Docker Image') {
 		    steps {
